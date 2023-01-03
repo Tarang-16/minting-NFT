@@ -1,5 +1,5 @@
 const { developmentChains, networkConfig } = require("../../helper-hardhat-config")
-const { network, ethers, getNamedAccounts, deployments } = require("hardhat")
+const { network, ethers, deployments } = require("hardhat")
 const { assert } = require("chai")
 
 !developmentChains.includes(network.name)
@@ -11,7 +11,7 @@ const { assert } = require("chai")
           beforeEach(async function () {
               accounts = await ethers.getSigners()
               deployer = accounts[0]
-              await deployments.fixture(["all"])
+              await deployments.fixture(["mocks", "basicNft"])
               basicNft = await ethers.getContract("BasicNft", deployer)
           })
 
@@ -43,11 +43,9 @@ const { assert } = require("chai")
               it("Show the correct balance and owner of an NFT", async function () {
                   const tx = await basicNft.mintNft()
                   tx.wait(1)
-
                   const deployerAddress = deployer.address
                   const deployerBalance = await basicNft.balanceOf(deployerAddress)
-                  const owner = await basicNft.ownerOf("0")
-
+                  const owner = await basicNft.ownerOf("1")
                   assert.equal(deployerBalance.toString(), "1")
                   assert.equal(owner, deployerAddress)
               })

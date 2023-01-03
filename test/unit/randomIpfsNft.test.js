@@ -47,7 +47,7 @@ const { developmentChains, networkConfig } = require("../../helper-hardhat-confi
           describe("fulfill Random Words", () => {
               it("mints the NFT after random number is returned", async function () {
                   await new Promise(async (resolve, reject) => {
-                      randomIpfsNft.once("NFTMinted", async () => {
+                      randomIpfsNft.once("NftMinted", async () => {
                           try {
                               const tokenUri = await randomIpfsNft.tokenURI("0")
                               const tokenCounter = await randomIpfsNft.getTokenCounter()

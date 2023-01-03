@@ -15,12 +15,12 @@ contract BasicNft is ERC721 {
     }
 
     function mintNft() public returns(uint256) {
-        _safeMint(msg.sender, s_tokenCounter);         // function in ERC721. You can check this in ERC721.sol
         s_tokenCounter += 1;
+        _safeMint(msg.sender, s_tokenCounter);         // function in ERC721. You can check this in ERC721.sol
         return s_tokenCounter;
     }
 
-    function tokenURI(uint256 /* tokenId */) public view override returns(string memory) {   // this function exists in ERC721 but we are not using that rather we are writing our own function.
+    function tokenURI(uint256 /* tokenId */) public pure override returns(string memory) {   // this function exists in ERC721 but we are not using that rather we are writing our own function.
         // require(_exists(tokenId))                                                         // since we are returning the same TOKEN_URI, so tokenId doesn't matter
         return TOKEN_URI;                      
     }
