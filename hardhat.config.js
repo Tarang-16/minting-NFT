@@ -1,10 +1,7 @@
 // for installing all the dependencies use the below code.
 // yarn add --dev @nomiclabs/hardhat-ethers@npm:hardhat-deploy-ethers ethers @nomiclabs/hardhat-etherscan @nomiclabs/hardhat-waffle chai ethereum-waffle hardhat hardhat-contract-sizer hardhat-deploy hardhat-gas-reporter prettier prettier-plugin-solidity solhint solidity-coverage dotenv
-require("@nomicfoundation/hardhat-chai-matchers")
-require("@nomiclabs/hardhat-etherscan")
+require("@nomicfoundation/hardhat-toolbox")
 require("hardhat-deploy")
-require("solidity-coverage")
-require("hardhat-gas-reporter")
 require("hardhat-contract-sizer")
 require("dotenv").config()
 
@@ -20,12 +17,12 @@ module.exports = {
             chainId: 31337,
             blockConfirmations: 1,
         },
-        goerli: {
-            chainId: 5,
-            blockConfirmations: 4,
-            accounts: [PRIVATE_KEY],
-            url: GOERLI_RPC_URL,
-        },
+        // goerli: {
+        //     chainId: 5,
+        //     blockConfirmations: 4,
+        //     accounts: [PRIVATE_KEY],
+        //     url: GOERLI_RPC_URL,
+        // },
     },
 
     namedAccounts: {
@@ -53,5 +50,12 @@ module.exports = {
     },
     mocha: {
         timeout: 500000,
+    },
+    gasReporter: {
+        enabled: false,
+        currency: "USD",
+        outputFile: "gas-report.txt",
+        noColors: true,
+        // coinmarketcap: COINMARKETCAP_API_KEY,
     },
 }

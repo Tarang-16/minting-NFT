@@ -1,6 +1,5 @@
 const { assert, expect } = require("chai")
-const { network, ethers, getNamedAccounts, deployments } = require("hardhat")
-const { resolve } = require("path")
+const { network, ethers, deployments } = require("hardhat")
 const { developmentChains, networkConfig } = require("../../helper-hardhat-config")
 
 !developmentChains.includes(network.name)
@@ -12,7 +11,7 @@ const { developmentChains, networkConfig } = require("../../helper-hardhat-confi
           beforeEach(async function () {
               accounts = await ethers.getSigners()
               deployer = accounts[0]
-              await deployments.fixture(["main"])
+              await deployments.fixture(["mocks", "randomipfsnft"])
               randomIpfsNft = await ethers.getContract("RandomIpfsNft", deployer)
               vrfCoordinatorV2Mock = await ethers.getContract("VRFCoordinatorV2Mock", deployer)
           })
@@ -37,7 +36,7 @@ const { developmentChains, networkConfig } = require("../../helper-hardhat-confi
 
               it("emits event", async function () {
                   const mintFee = await randomIpfsNft.getMintFee()
-                  await expect(randomIpfsNft.requestNft({ value: mintFee })).to.emit(
+                  await expect(randomIpfsNft.requestNft({ value: mintFee.toString() })).to.emit(
                       randomIpfsNft,
                       "NftRequested"
                   )
@@ -48,6 +47,7 @@ const { developmentChains, networkConfig } = require("../../helper-hardhat-confi
               it("mints the NFT after random number is returned", async function () {
                   await new Promise(async (resolve, reject) => {
                       randomIpfsNft.once("NftMinted", async () => {
+                          console.log("fired")
                           try {
                               const tokenUri = await randomIpfsNft.tokenURI("0")
                               const tokenCounter = await randomIpfsNft.getTokenCounter()
@@ -63,7 +63,7 @@ const { developmentChains, networkConfig } = require("../../helper-hardhat-confi
                       try {
                           const mintFee = await randomIpfsNft.getMintFee()
                           const requestNftResponse = await randomIpfsNft.requestNft({
-                              value: mintFee,
+                              value: mintFee.toString(),
                           })
                           const requestNftReceipt = await requestNftResponse.wait(1)
                           await vrfCoordinatorV2Mock.fulfillRandomWords(
